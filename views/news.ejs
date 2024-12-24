@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast News</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .news-section {
+            flex: 1;
+            background-color: #1f1f1f;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .news-section img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .news-section h2 {
+            margin: 10px 0 5px;
+            font-size: 1.5rem;
+        }
+
+        .news-section p {
+            line-height: 1.5;
+        }
+
+    </style>
+    <script>
+        function openDetail(url) {
+            window.open(url, '_blank');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Weather Forecast News</h1>
+    </header>
+    
+    <main>
+        <section class="news-section" onclick="openDetail('https://www.indiatoday.in/weather/delhi-weather-forecast-today')">
+            <img src="delhi-winter-image.jpg" alt="Weather Update">
+            <h2>Cold wave getting better of the Capital</h2>
+            <p>Delhi Temperatures Drop 4 Degrees Below Normal on Monday Morning as Cold Wave Grips City!</p>
+        </section>
+
+        <section class="news-section" onclick="openDetail('https://timesofindia.indiatimes.com/city/mumbai/mumbai-boat-accident-indian-navy-chief-to-visit-today-for-investigation-search-operations-under-way/articleshow/116491598.cms')">
+            <img src="storm image.jpg" alt="Rain Forecast">
+            <h2>Tough times in ocean for Indian Navy</h2>
+            <p>Navy Speedboat Loses Control and Collides With Mumbai Ferry, Killing At Least 13 Individuals.</p>
+        </section>
+
+        <section class="news-section" onclick="openDetail('https://weather.com/en-IN/india/news/news/2024-12-21-40-day-chillai-kalan-begins-in-kashmir-coldwave-and-snowfall-likely')">
+            <img src="winter image.jpg" alt="Winter Weather">
+            <h2>Winter lands in Northern India</h2>
+            <p>Kashmir Plunges into 40-Day Chillai Kalan; Intense Coldwave, Snowfall Expected Through Christmas.</p>
+        </section>
+    </main>
+
+    
+</body>
+</html>

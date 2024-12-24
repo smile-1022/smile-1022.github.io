@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #1a1a1a;
+        }
+
+        .search-bar {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+
+        .weather-info {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .weather-info .temp {
+            font-size: 80px;
+            font-weight: bold;
+        }
+
+        .weather-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .weather-details .tab {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            width: 120px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .weather-details .tab:hover {
+            background-color: #555;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #1a1a1a;
+            padding: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
+        .news-section {
+            padding: 20px;
+            background-color: #222;
+            margin-top: 50px;
+        }
+
+        .news-section h3 {
+            margin-top: 0;
+        }
+
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .chatbot-window {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: #222;
+            border-radius: 10px;
+            display: none;
+            padding: 20px;
+            color: white;
+            overflow-y: auto;
+        }
+
+        .chatbot-window input {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="search-bar-container">
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search City">
+    </div>
+</header>
+
+<div class="sidebar">
+    <a href="#" onclick="showTab('cloud')">Cloud</a>
+    <a href="#" onclick="showTab('feels-like')">Feels Like</a>
+    <a href="#" onclick="showTab('pressure')">Pressure</a>
+    <a href="#" onclick="showTab('humidity')">Humidity</a>
+    <a href="#" onclick="showTab('wind-speed')">Wind Speed</a>
+    <a href="#" onclick="showTab('wind-degree')">Wind Degree</a>
+</div>
+
+<div class="main-content">
+    <div class="weather-info">
+        <div class="temp" id="temp">--°C</div>
+        <div class="weather-details">
+            <div class="tab" id="cloud">Cloud: --</div>
+            <div class="tab" id="feels-like">Feels Like: --</div>
+            <div class="tab" id="pressure">Pressure: --</div>
+            <div class="tab" id="humidity">Humidity: --</div>
+            <div class="tab" id="wind-speed">Wind Speed: --</div>
+            <div class="tab" id="wind-degree">Wind Degree: --</div>
+        </div>
+    </div>
+
+    <div class="news-section">
+        <h3>Current Weather News</h3>
+        <p>Latest weather updates will appear here.</p>
+    </div>
+</div>
+
+<div class="chatbot" onclick="toggleChatbot()">💬</div>
+
+<div class="chatbot-window" id="chatbot-window">
+    <h4>Chat with us!</h4>
+    <div id="chat-content"></div>
+    <input type="text" id="chat-input" placeholder="Type your message..." onkeyup="sendMessage(event)">
+</div>
+
+<script>
+    // API key for weather data (you need to replace it with a real API key)
+    const apiKey = 'your-api-key';
+    const baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+
+    // Function to fetch weather data
+    function getWeather(city) {
+        fetch(`${baseUrl}?q=${city}&appid=${apiKey}&units=metric`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('temp').innerText = `${data.main.temp}°C`;
+                document.getElementById('cloud').innerText = `Cloud: ${data.clouds.all}%`;
+                document.getElementById('feels-like').innerText = `Feels Like: ${data.main.feels_like}°C`;
+                document.getElementById('pressure').innerText = `Pressure: ${data.main.pressure} hPa`;
+                document.getElementById('humidity').innerText = `Humidity: ${data.main.humidity}%`;
+                document.getElementById('wind-speed').innerText = `Wind Speed: ${data.wind.speed} m/s`;
+                document.getElementById('wind-degree').innerText = `Wind Degree: ${data.wind.deg}°`;
+            })
+            .catch(err => {
+                alert('Error fetching weather data.');
+            });
+    }
+
+    // Function to show tab content
+    function showTab(tab) {
+        alert(`Showing data for ${tab}`);
+    }
+
+    // Chatbot functions
+    function toggleChatbot() {
+        const chatbotWindow = document.getElementById('chatbot-window');
+        chatbotWindow.style.display = chatbotWindow.style.display === 'none' || chatbotWindow.style.display === '' ? 'block' : 'none';
+    }
+
+    function sendMessage(event) {
+        if (event.key === 'Enter') {
+            const message = document.getElementById('chat-input').value;
+            const chatContent = document.getElementById('chat-content');
+            chatContent.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+            document.getElementById('chat-input').value = '';
+            // Simulate chatbot response
+            setTimeout(() => {
+                chatContent.innerHTML += `<p><strong>Bot:</strong> I received your message: "${message}".</p>`;
+                chatContent.scrollTop = chatContent.scrollHeight;
+            }, 1000);
+        }
+    }
+
+    // Event listener for search bar
+    document.getElementById('search-bar').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const city = e.target.value;
+            getWeather(city);
+        }
+    });
+</script>
+
+</body>
+</html>

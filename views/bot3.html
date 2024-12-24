@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Chatbot</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #chatbot {
+            background: linear-gradient(145deg, #1f1f1f, #292929);
+            border-radius: 20px;
+            box-shadow: 5px 5px 15px #0e0e0e, -5px -5px 15px #363636;
+            width: 400px;
+            max-height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #chat-header {
+            background-color: #2c2c2c;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #00d4ff;
+        }
+
+        #chat-box {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 70%;
+        }
+
+        .user {
+            align-self: flex-end;
+            background-color: #ff5722;
+            color: white;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background-color: #383838;
+            color: #00d4ff;
+        }
+
+        #chat-input {
+            display: flex;
+            padding: 10px;
+            background-color: #1f1f1f;
+        }
+
+        #chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 15px;
+            background-color: #2c2c2c;
+            color: #ffffff;
+        }
+
+        #chat-input input:focus {
+            outline: none;
+            box-shadow: 0 0 5px #00d4ff;
+        }
+
+        #chat-input button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 15px;
+            background-color: #00d4ff;
+            color: #121212;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #chat-input button:hover {
+            background-color: #00b3e6;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbot">
+        <div id="chat-header">WeatherBot 🌦️</div>
+        <div id="chat-box"></div>
+        <div id="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+
+        const botReplies = [
+            "How can I help you with weather today?",
+            "Did you know that clouds are made of tiny water droplets?",
+            "Let me check the weather for you.",
+            "I can also chat about movies, sports, and more!",
+            "The world’s weather is fascinating, isn’t it?",
+            "what is the area you want to check the weather for"
+        ];
+
+        async function fetchWeather(location) {
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=YOUR_API_KEY&units=metric`);
+            const data = await response.json();
+            if (data.cod === 200) {
+                return `The weather in ${data.name} is ${data.weather[0].description} with a temperature of ${data.main.temp}°C.`;
+            } else {
+                return "Sorry, I couldn't fetch the weather for that location. Please try again.";
+            }
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (!userInput.trim()) return;
+
+            appendMessage(userInput, 'user');
+            document.getElementById('user-input').value = '';
+
+            if (userInput.toLowerCase().includes('weather')) {
+                const location = userInput.split(' ').pop();
+                fetchWeather(location).then((weather) => appendMessage(weather, 'bot'));
+            } else {
+                const randomReply = botReplies[Math.floor(Math.random() * botReplies.length)];
+                appendMessage(randomReply, 'bot');
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const message = document.createElement('div');
+            message.className = `message ${sender}`;
+            message.textContent = text;
+            chatBox.appendChild(message);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>

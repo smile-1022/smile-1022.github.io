@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAPID WEATHER</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(28, 26, 26);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #1f1f1f;
+        }
+        .weather-section {
+            background: #2c2c54;
+            border-radius: 15px;
+            padding: 15px;
+            flex: 1 1 calc(33% - 20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .weather-section h2 {
+            color: #00d4ff;
+            margin: 10px 0;
+        }
+
+        .weather-section p {
+            margin: 5px 0;
+        }
+
+
+        .search-bar {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .weather-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 0;
+        }
+
+        .weather-info {
+            text-align: center;
+        }
+
+        .temperature {
+            font-size: 80px;
+            font-weight: bold;
+        }
+
+        .weather-details {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .weather-details span {
+            display: block;
+            margin: 10px 0;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 70px;
+            background-color: #1f1f1f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+             
+        }
+
+        #sidebar a {
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #1f1f1f;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .weather-news {
+            background-color: #1f1f1f;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .weather-news h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .weather-news p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Rapid Weather</h1>
+        <input class="search-bar" type="text" placeholder="Search city...">
+    </header>
+
+    <div class="sidebar">
+        <a href="#">☁️</a>
+        <a href="#">🌡️</a>
+        <a href="#">💨</a>
+        <a href="#">💧</a>
+        <a href="#">📊</a>
+    </div>
+
+    <div class="weather-container">
+        <div class="weather-info">
+            <div class="temperature" id="main-temp">25°C</div>
+            <div class="weather-details">
+                
+                <span>Clouds: 20%</span>
+                <span>Feels Like: 23°C</span>
+                <span>Pressure: 1015 hPa</span>
+                <span>Humidity: 60%</span>
+                <span>Wind Speed: 10 km/h</span>
+                <span>Wind Degree: 180°</span>
+            </div>
+        </div>
+    </div>
+    <div id="main-content">
+        <div id="search-bar">
+            <input type="text" placeholder="Search for a location...">
+            <button>Search</button>
+        </div>
+        <div class="weather-section">
+            <h2>Current Weather</h2>
+            <p>Temperature: --°C</p>
+        </div>
+        <div class="weather-section">
+            <h2 class="display-5">Feels like temp is -> <span id="feels_like"></span></h2>
+          <p class="lead"></p>
+        </div>
+        <div class="weather-section">
+            <h2>Precipitation</h2>
+            <p>Rain: --mm</p>
+        </div>
+        <div class="weather-section">
+            <h2>Air Quality Index</h2>
+            <p>AQI: --</p>
+        </div>
+        <div class="weather-section">
+            <h2>Humidity</h2> <span id="cityName"></span> humidity is = <span id="humidity"></span>
+            <p>Humidity: --%</p>
+        </div>
+        <div class="weather-section">
+            <h2 class="display-5">Wind Speed is -> <span id="wind_chill"></span></h2>
+          <p class="lead"></p>
+        </div>
+        <div class="weather-section">
+            <h2 class="display-5">Pressure is -> <span id=""></span></h2>
+            <p class="lead"></p>
+        </div>
+        <div class="weather-section">
+            <h2>Wind Degree</h2>
+            <p>Degree: --°</p>
+        </div>
+    </div>
+
+
+    <div class="weather-news">
+        <h2>Current Weather News</h2>
+        <p>Heavy rains expected in the north-western region due to cold front approaching.</p>
+        <p>Temperatures to drop by 5°C over the weekend.</p>
+    </div>
+
+    <div class="chatbot" onclick="openChat()">💬 Chat</div>
+
+    <script>
+        // Placeholder function for opening the chatbot
+        function openChat() {
+            alert("Chatbot feature coming soon!");
+        }
+
+        // You can use JavaScript to fetch actual weather data from an API and update the elements dynamically.
+    </script>
+</body>
+
+</html>

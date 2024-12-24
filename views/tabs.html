@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .weather-section {
+            background: #2c2c54;
+            border-radius: 15px;
+            padding: 15px;
+            flex: 1 1 calc(33% - 20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .weather-section h2 {
+            color: #00d4ff;
+            margin: 10px 0;
+        }
+
+        .weather-section p {
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="main-content">
+        <div id="search-bar">
+            <input type="text" placeholder="Search for a location...">
+            <button>Search</button>
+        </div>
+        <div class="weather-section">
+            <h2>Current Weather</h2>
+            <p>Temperature: --°C</p>
+        </div>
+        <div class="weather-section">
+            <h2>Feels Like</h2>
+            <p>Feels like: --°C</p>
+        </div>
+        <div class="weather-section">
+            <h2>Precipitation</h2>
+            <p>Rain: --mm</p>
+        </div>
+        <div class="weather-section">
+            <h2>Air Quality Index</h2>
+            <p>AQI: --</p>
+        </div>
+        <div class="weather-section">
+            <h2>Humidity</h2>
+            <p>Humidity: --%</p>
+        </div>
+        <div class="weather-section">
+            <h2>Wind Speed</h2>
+            <p>Speed: -- km/h</p>
+        </div>
+        <div class="weather-section">
+            <h2>Pressure</h2>
+            <p>Pressure: -- hPa</p>
+        </div>
+        <div class="weather-section">
+            <h2>Wind Degree</h2>
+            <p>Degree: --°</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hourly Weather Updates</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        header {
+            background-color: #1e1e2e;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3rem;
+            color: #ff9800;
+            text-transform: uppercase;
+        }
+
+        main {
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .content {
+            margin-bottom: 30px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .chart {
+            background: linear-gradient(145deg, #1c1c28, #232336);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: inset 4px 4px 8px #1a1a24, inset -4px -4px 8px #2a2a40, 0 8px 15px rgba(0, 0, 0, 0.4);
+            flex: 1 1 45%;
+            max-width: 600px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart canvas {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            background-color: #1c1c28;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #444;
+            color: #bdbdbd;
+        }
+
+        th {
+            background-color: #333;
+            color: #ff9800;
+            text-transform: uppercase;
+        }
+
+        td {
+            background-color: #2a2a38;
+            transition: background-color 0.3s ease;
+        }
+
+        td:hover {
+            background-color: #3a3a47;
+        }
+
+        footer {
+            background-color: #1e1e2e;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 1px solid #444;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+            color: #bdbdbd;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #e57373;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+    
+</head>
+<body>
+    <header>
+        <h1>Hourly Weather Updates</h1>
+    </header>
+
+    <main>
+        <div class="content">
+            <p>Stay informed about the latest hourly weather updates in your area. This page provides a detailed breakdown of the temperature and precipitation levels for each hour of the day. Plan your activities effectively with accurate and timely data from our trusted sources.</p>
+            <p>The charts below showcase a visual representation of the weather forecast for the next 24 hours. The line chart illustrates the temperature trends, while the bar chart depicts precipitation levels. Together, they give you a complete picture of the weather conditions.</p>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart">
+                <canvas id="lineChart"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Hour</th>
+                    <th>Temperature (°C)</th>
+                    <th>Precipitation (mm)</th>
+                </tr>
+            </thead>
+            <tbody id="weatherTableBody">
+                <!-- Data rows will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Weather Forecast Website. All Rights Reserved.</p>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        async function fetchWeatherUpdates() {
+            try {
+                const response = await fetch('https://api.weatherapi.com/v1/forecast.json?key=YOUR_API_KEY&q=YOUR_LOCATION&hours=24');
+                const data = await response.json();
+
+                const hours = data.forecast.forecastday[0].hour.map(hour => hour.time.split(' ')[1]);
+                const temperatures = data.forecast.forecastday[0].hour.map(hour => hour.temp_c);
+                const precipitations = data.forecast.forecastday[0].hour.map(hour => hour.precip_mm);
+
+                createLineChart(hours, temperatures);
+                createBarChart(hours, precipitations);
+                displayWeatherTable(hours, temperatures, precipitations);
+            } catch (error) {
+                displayError('Failed to fetch weather updates. Please try again later.');
+                console.error('Error fetching weather updates:', error);
+            }
+        }
+
+        function createLineChart(labels, data) {
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        data,
+                        borderColor: '#ff9800',
+                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff',
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: '#444' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: '#444' }
+                        }
+                    }
+                },
+            });
+        }
+
+        function createBarChart(labels, data) {
+            const ctx = document.getElementById('barChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Precipitation (mm)',
+                        data,
+                        backgroundColor: '#2196f3',
+                        borderRadius: 5,
+                        borderSkipped: false,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff',
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: '#444' }
+                        },
+                        y: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: '#444' }
+                        }
+                    }
+                },
+            });
+        }
+
+        function displayWeatherTable(hours, temperatures, precipitations) {
+            const tableBody = document.getElementById('weatherTableBody');
+            tableBody.innerHTML = '';
+            for (let i = 0; i < hours.length; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${hours[i]}</td>
+                    <td>${temperatures[i]} °C</td>
+                    <td>${precipitations[i]} mm</td>
+                `;
+                tableBody.appendChild(row);
+            }
+        }
+
+        function displayError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerText = message;
+            document.querySelector('main').appendChild(errorDiv);
+        }
+        window.onload = fetchWeatherUpdates;
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Chatbot</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #chatbot-container {
+            width: 400px;
+            height: 600px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chatbox {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .user {
+            align-self: flex-end;
+            background-color: #007bff;
+            color: #fff;
+        }
+        .bot {
+            align-self: flex-start;
+            background-color: #444;
+            color: #fff;
+        }
+        #input-container {
+            display: flex;
+            border-top: 1px solid #333;
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background-color: #1e1e1e;
+            color: #fff;
+            font-size: 16px;
+        }
+        #user-input:focus {
+            outline: none;
+        }
+        #send-btn {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #send-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbot-container">
+        <div id="chatbox"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Ask me about weather or anything...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Mock function to simulate API response
+        async function getWeather(location) {
+            // Replace with real API integration
+            return `The weather in ${location} is sunny with a high of 25°C.`;
+        }
+
+        function addMessage(content, isBot = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
+            messageDiv.textContent = content;
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        sendBtn.addEventListener('click', async () => {
+            const userMessage = userInput.value.trim();
+            if (!userMessage) return;
+
+            addMessage(userMessage, false);
+            userInput.value = '';
+
+            let botResponse;
+
+            if (userMessage.toLowerCase().includes('weather')) {
+                const location = userMessage.split('weather in ')[1] || 'your location';
+                botResponse = await getWeather(location);
+            } else {
+                const randomResponses = [
+                    "Did you know that the moon has moonquakes?",
+                    "I can tell you about the weather or chat about random topics!",
+                    "The longest time between two twins being born is 87 days.",
+                    "What’s your favorite season?",
+                    "Ask me anything about the weather!"
+                ];
+                botResponse = randomResponses[Math.floor(Math.random() * randomResponses.length)];
+            }
+
+            addMessage(botResponse, true);
+        });
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
